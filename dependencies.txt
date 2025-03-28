@@ -1,0 +1,21 @@
+# This is an React web application built with next.js on top
+
+# The first thing to check is the Node.js installation on your machine. 
+# Follow the below instructions to check the Installation
+# Windows & Mac:
+    Open command prompt as administrator (search for it, right-click, and run as administrator).
+    Run these commands one after another:
+    node -v
+    npm -v
+
+#If these above commands are not recognized, install Node.js from scratch.
+    If versions are displayed, ensure they are the latest:
+
+# If not, update your Node.js installation.
+    Windows - https://nodejs.org/en/download/current/
+    Mac - https://nodejs.org/en/download/current/
+
+# Necessary Packages
+    Once the code is cloned from the git, run the below commands to download the dependencies, that is necessary to run the project
+    npm install         # used to download the necessary node Packages for the project
+    
