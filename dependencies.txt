@@ -18,4 +18,5 @@
 # Necessary Packages
     Once the code is cloned from the git, run the below commands to download the dependencies, that is necessary to run the project
     npm install         # used to download the necessary node Packages for the project
-    
+
+# Installation AWS Toolkit from the vs code market place
