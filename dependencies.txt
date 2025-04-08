@@ -34,3 +34,7 @@
     aws s3 ls --profile student
 
 # Install AWS SDK =>  npm install aws-sdk
+
+#for uplaod-images.ts to work, we use the following in the cmd:
+# npm install axios mime-types
+# npm i --save-dev @types/mime-types
