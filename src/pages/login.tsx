@@ -1,8 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-
-
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -10,17 +8,29 @@ export default function Login() {
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' }
-    });
+    // Basic validation
+    if (!email || !password) {
+      setError('Please enter both email and password');
+      return;
+    }
 
-    const data = await res.json();
-    if (res.ok) {
-      router.push('/main'); // redirect to your main page after login
-    } else {
-      setError(data.error);
+    setError(''); // Clear previous error
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        router.push('/main'); // Redirect to main page on success
+      } else {
+        setError(data.error || 'Invalid credentials');
+      }
+    } catch (err) {
+      setError('Something went wrong. Please try again later.');
     }
   };
 
@@ -49,7 +59,8 @@ export default function Login() {
       </button>
       {error && <p className="text-red-500 mt-2">{error}</p>}
       <p className="mt-4">
-        Don’t have an account? <a href="/register" className="text-blue-600 underline">Register here</a>
+        Don’t have an account?{' '}
+        <a href="/register" className="text-blue-600 underline">Register here</a>
       </p>
     </div>
   );
