@@ -20,7 +20,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ error: 'Email or password is invalid' });
     }
 
-    res.status(200).json({ message: 'Login successful' });
+    // ✅ Send username in response
+    res.status(200).json({ 
+      message: 'Login successful',
+      username: result.Item.user_name
+    });
+
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
