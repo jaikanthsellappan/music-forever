@@ -21,7 +21,7 @@
 
 # Installation AWS Toolkit from the vs code market place
 
-# download ans install aws cli  => https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+# download and install aws cli  => https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
 # check whether the awsis installed or not => aws --version
 
@@ -38,3 +38,8 @@
 #for uplaod-images.ts to work, we use the following in the cmd:
 # npm install axios mime-types
 # npm i --save-dev @types/mime-types
+
+# need a create a new table in dynamo db:
+    Table name - subscriptions
+    email - String
+    title - String

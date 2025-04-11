@@ -11,26 +11,30 @@ export default function Register() {
   const handleRegister = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
-
+  
     if (!emailRegex.test(email)) {
       setError("Please enter a valid email address.");
       return;
     }
-
+  
     if (!passwordRegex.test(password)) {
       setError("Password must be at least 6 characters, one uppercase, one special character.");
       return;
     }
-
+  
     try {
-      const res = await fetch("/api/register", {
+      const payload = {
+        body: JSON.stringify({ email, username, password })  // 👈 double-wrapped
+      };
+  
+      const res = await fetch("https://lz26am3j71.execute-api.us-east-1.amazonaws.com/prod/register_New_User", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify(payload),  // 👈 outer JSON.stringify
       });
-
+  
       const data = await res.json();
-
+  
       if (res.ok) {
         router.push("/login");
       } else {
