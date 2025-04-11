@@ -8,27 +8,17 @@ export default function Login() {
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-        headers: { 'Content-Type': 'application/json' }
-      });
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+      headers: { 'Content-Type': 'application/json' }
+    });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        // ✅ Store user info in sessionStorage
-        sessionStorage.setItem('email', email);
-        sessionStorage.setItem('username', data.username); // <-- Make sure your API returns this
-
-        router.push('/main'); // ✅ Redirect to main page
-      } else {
-        setError(data.error || "Email or password is invalid.");
-      }
-    } catch (err) {
-      setError("Login error. Please try again.");
-      console.error(err);
+    const data = await res.json();
+    if (res.ok) {
+      router.push('/main'); // redirect to your main page after login
+    } else {
+      setError(data.error);
     }
   };
 
@@ -62,10 +52,7 @@ export default function Login() {
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <p className="mt-4">
-        Don’t have an account?{" "}
-        <a href="/register" className="text-blue-600 underline">
-          Register here
-        </a>
+        Don’t have an account? <a href="/register" className="text-blue-600 underline">Register here</a>
       </p>
     </div>
   );
