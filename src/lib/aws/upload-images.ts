@@ -10,7 +10,7 @@ AWS.config.credentials = credentials;
 AWS.config.update({ region: 'us-east-1' });
 
 const s3 = new AWS.S3();
-const BUCKET_NAME = 'music-forever-artist-images';
+const BUCKET_NAME = 'music-forever-artist-images2';
 const REGION = 'us-east-1';
 
 export async function uploadArtistImages() {
@@ -36,6 +36,28 @@ export async function uploadArtistImages() {
     }
   };
 
+  const listS3ImageCount = async (): Promise<number> => {
+    const params = {
+      Bucket: BUCKET_NAME,
+      Prefix: 'artist-images/',
+    };
+
+    let count = 0;
+    let continuationToken: string | undefined;
+
+    do {
+      const response = await s3.listObjectsV2({
+        ...params,
+        ContinuationToken: continuationToken
+      }).promise();
+
+      count += response.Contents?.length || 0;
+      continuationToken = response.IsTruncated ? response.NextContinuationToken : undefined;
+    } while (continuationToken);
+
+    return count;
+  };
+
   const downloadImage = async (url: string): Promise<Buffer> => {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
     return Buffer.from(response.data, 'binary');
@@ -47,7 +69,6 @@ export async function uploadArtistImages() {
       Key: `artist-images/${filename}`,
       Body: buffer,
       ContentType: contentType,
-      //ACL: 'public-read'
     };
     await s3.putObject(params).promise();
     console.log(`✅ Uploaded ${filename}`);
@@ -58,10 +79,23 @@ export async function uploadArtistImages() {
   const dataPath = path.join(process.cwd(), '2025a1.json');
   const raw = JSON.parse(fs.readFileSync(dataPath, 'utf-8'));
   const songs = raw.songs;
-  const seen = new Set<string>();
 
-  for (const song of songs) {
-    const url = song.img_url;
+  // Extract unique image URLs from JSON
+  const uniqueUrls = [...new Set(songs.map((s: any) => s.img_url))];
+  const expectedImageCount = uniqueUrls.length;
+
+  // Get actual image count in S3
+  const existingImageCount = await listS3ImageCount();
+
+  // 🛑 Skip if already uploaded
+  if (existingImageCount >= expectedImageCount) {
+    console.log(`⏭️ ${existingImageCount} images already in S3, skipping upload.`);
+    return;
+  }
+
+  // Upload each image
+  const seen = new Set<string>();
+  for (const url of uniqueUrls) {
     if (seen.has(url)) continue;
 
     try {
@@ -77,5 +111,5 @@ export async function uploadArtistImages() {
     }
   }
 
-  console.log('🎉 All artist images uploaded.');
+  console.log('🎉 Image upload check complete.');
 }

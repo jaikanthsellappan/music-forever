@@ -10,15 +10,18 @@ export default function Login() {
   const handleLogin = async () => {
     const res = await fetch('/api/login', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' }
     });
 
     const data = await res.json();
+
     if (res.ok) {
-      router.push('/main'); // redirect to your main page after login
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("username", data.username);
+      router.push('/main');
     } else {
-      setError(data.error);
+      setError(data.error || "Login failed.");
     }
   };
 
@@ -52,7 +55,8 @@ export default function Login() {
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <p className="mt-4">
-        Don’t have an account? <a href="/register" className="text-blue-600 underline">Register here</a>
+        Don’t have an account?{" "}
+        <a href="/register" className="text-blue-600 underline">Register here</a>
       </p>
     </div>
   );
