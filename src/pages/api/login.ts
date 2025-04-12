@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import AWS from 'aws-sdk';
 
 // Setup AWS credentials and region
-const credentials = new AWS.SharedIniFileCredentials({ profile: 'student' });
-AWS.config.credentials = credentials;
+// const credentials = new AWS.SharedIniFileCredentials({ profile: 'student' });
+// AWS.config.credentials = credentials;
 AWS.config.update({ region: 'us-east-1' });
 
 // Initialize DynamoDB client

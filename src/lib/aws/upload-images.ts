@@ -10,7 +10,7 @@ AWS.config.credentials = credentials;
 AWS.config.update({ region: 'us-east-1' });
 
 const s3 = new AWS.S3();
-const BUCKET_NAME = 'music-forever-artist-images2';
+const BUCKET_NAME = 'music-forever-artist-images1';
 const REGION = 'us-east-1';
 
 export async function uploadArtistImages() {
@@ -95,7 +95,7 @@ export async function uploadArtistImages() {
 
   // Upload each image
   const seen = new Set<string>();
-  for (const url of uniqueUrls) {
+  for (const url of uniqueUrls as string[]) {
     if (seen.has(url)) continue;
 
     try {

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import AWS from 'aws-sdk';
 
-const credentials = new AWS.SharedIniFileCredentials({ profile: 'student' });
-AWS.config.credentials = credentials;
+// const credentials = new AWS.SharedIniFileCredentials({ profile: 'student' });
+// AWS.config.credentials = credentials;
 AWS.config.update({ region: 'us-east-1' });
 
 const docClient = new AWS.DynamoDB.DocumentClient();

@@ -43,3 +43,9 @@
     Table name - subscriptions
     email - String
     title - String
+
+# After moving the changes to the ec2 machine
+    need to install all the necessary dependencies
+    aws student account configuration is not necessary in ec2
+    build the application, by using =>  npm run dev
+    then run it in production mode by using => npm start
