@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import AWS from "aws-sdk";
 
+// Ensure AWS loads config from ~/.aws/config and ~/.aws/credentials
+process.env.AWS_SDK_LOAD_CONFIG = '1';
 AWS.config.update({ region: "us-east-1" }); // Change region if needed
 const docClient = new AWS.DynamoDB.DocumentClient();
 

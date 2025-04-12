@@ -5,8 +5,11 @@ import path from 'path';
 import mime from 'mime-types';
 
 // AWS setup
-const credentials = new AWS.SharedIniFileCredentials({ profile: 'student' });
-AWS.config.credentials = credentials;
+// const credentials = new AWS.SharedIniFileCredentials({ profile: 'student' });
+// AWS.config.credentials = credentials;
+// Ensure AWS loads config from ~/.aws/config and ~/.aws/credentials
+process.env.AWS_SDK_LOAD_CONFIG = '1';
+
 AWS.config.update({ region: 'us-east-1' });
 
 const s3 = new AWS.S3();
