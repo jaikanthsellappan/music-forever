@@ -34,14 +34,27 @@ export default function Register() {
         body: JSON.stringify(payload), 
       });
   
-      const data = await res.json();
-  
-      if (res.ok) {
-        alert("User Registred Successfully!");
+      // const data = await res.json();
+
+      const rawBody = await res.text();
+    const parsed = JSON.parse(rawBody); // Top-level object with statusCode, body
+
+    const data = typeof parsed.body === 'string' ? JSON.parse(parsed.body) : parsed.body;
+
+    if (parsed.statusCode !== 200 || data.error) {
+      setError(data.error || "Registration failed.");
+    }
+    else {
+      alert("User Registred Successfully!");
         router.push("/login");
-      } else {
-        setError(data.error || "Registration failed.");
-      }
+    }
+  
+      // if (res.ok) {
+      //   alert("User Registred Successfully!");
+      //   router.push("/login");
+      // } else {
+      //   setError(data.error || "Registration failed.");
+      // }
     } catch (err) {
       console.error("Register error:", err);
       setError("Something went wrong.");
