@@ -20,10 +20,10 @@ export async function uploadArtistImages() {
   const ensureBucketExists = async () => {
     try {
       await s3.headBucket({ Bucket: BUCKET_NAME }).promise();
-      console.log(`✅ Bucket "${BUCKET_NAME}" already exists`);
+      console.log(`Bucket "${BUCKET_NAME}" already exists`);
     } catch (err: any) {
       if (err.statusCode === 404) {
-        console.log(`ℹ️ Creating bucket "${BUCKET_NAME}"...`);
+        console.log(` Creating bucket "${BUCKET_NAME}"...`);
         await s3.createBucket({
           Bucket: BUCKET_NAME,
           ...(REGION === 'us-east-1' ? {} : {
@@ -32,9 +32,9 @@ export async function uploadArtistImages() {
             }
           })
         }).promise();
-        console.log(`✅ Bucket "${BUCKET_NAME}" created`);
+        console.log(`Bucket "${BUCKET_NAME}" created`);
       } else {
-        throw new Error(`❌ Error checking bucket: ${err.message}`);
+        throw new Error(`Error checking bucket: ${err.message}`);
       }
     }
   };
@@ -74,7 +74,7 @@ export async function uploadArtistImages() {
       ContentType: contentType,
     };
     await s3.putObject(params).promise();
-    console.log(`✅ Uploaded ${filename}`);
+    console.log(`Uploaded ${filename}`);
   };
 
   await ensureBucketExists();
@@ -90,7 +90,7 @@ export async function uploadArtistImages() {
   // Get actual image count in S3
   const existingImageCount = await listS3ImageCount();
 
-  // 🛑 Skip if already uploaded
+  //  Skip if already uploaded
   if (existingImageCount >= expectedImageCount) {
     console.log(`⏭️ ${existingImageCount} images already in S3, skipping upload.`);
     return;
@@ -110,9 +110,9 @@ export async function uploadArtistImages() {
       await uploadToS3(buffer, fileName, contentType);
       seen.add(url);
     } catch (err: any) {
-      console.error(`❌ Failed for ${url}: ${err.message}`);
+      console.error(` Failed for ${url}: ${err.message}`);
     }
   }
 
-  console.log('🎉 Image upload check complete.');
+  console.log('Image upload check complete.');
 }

@@ -25,18 +25,19 @@ export default function Register() {
   
     try {
       const payload = {
-        body: JSON.stringify({ email, username, password })  // 👈 double-wrapped
+        body: JSON.stringify({ email, username, password }) 
       };
   
       const res = await fetch("https://lz26am3j71.execute-api.us-east-1.amazonaws.com/prod/register_New_User", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),  // 👈 outer JSON.stringify
+        body: JSON.stringify(payload), 
       });
   
       const data = await res.json();
   
       if (res.ok) {
+        alert("User Registred Successfully!");
         router.push("/login");
       } else {
         setError(data.error || "Registration failed.");

@@ -18,7 +18,7 @@ export default function Login() {
       const res = await fetch("https://4ev9dnibuj.execute-api.us-east-1.amazonaws.com/prod1/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: JSON.stringify({ email, password }) }), // ✅ FIXED here
+        body: JSON.stringify({ body: JSON.stringify({ email, password }) }), 
       });
 
       const rawBody = await res.text();
@@ -31,7 +31,7 @@ export default function Login() {
       return;
     }
 
-    // ✅ Login successful
+    // Login successful
     sessionStorage.setItem("email", email);
     sessionStorage.setItem("username", data.username);
     router.push("/main");

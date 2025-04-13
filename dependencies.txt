@@ -26,11 +26,11 @@
 # check whether the awsis installed or not => aws --version
 
 # command to set up our temporary student id in aws cli
-    aws configure set aws_access_key_id YOUR_ACCESS_KEY_ID --profile student
-    aws configure set aws_secret_access_key YOUR_SECRET_ACCESS_KEY --profile student
-    aws configure set aws_session_token "YOUR_SESSION_TOKEN" --profile student
-    aws configure set region us-east-1 --profile student
-    aws sts get-caller-identity --profile student
+    aws configure set aws_access_key_id YOUR_ACCESS_KEY_ID 
+    aws configure set aws_secret_access_key YOUR_SECRET_ACCESS_KEY 
+    aws configure set aws_session_token "YOUR_SESSION_TOKEN" 
+    aws configure set region us-east-1
+    aws sts get-caller-identity
     aws s3 ls --profile student
 
 # Install AWS SDK =>  npm install aws-sdk

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-
+ 
 interface Song {
   title: string;
   artist: string;
@@ -9,7 +9,7 @@ interface Song {
   year: string;
   image_url: string;
 }
-
+ 
 export default function MainPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -18,7 +18,7 @@ export default function MainPage() {
   const [query, setQuery] = useState({ title: "", artist: "", album: "", year: "" });
   const [results, setResults] = useState<Song[]>([]);
   const [message, setMessage] = useState("");
-
+ 
   useEffect(() => {
     const storedEmail = sessionStorage.getItem("email");
     const storedUsername = sessionStorage.getItem("username");
@@ -30,26 +30,32 @@ export default function MainPage() {
     setUsername(storedUsername);
     fetchSubscriptions(storedEmail);
   }, []);
-
+ 
   const fetchSubscriptions = async (email: string) => {
-    const res = await fetch("/api/subscriptions", {
+    const res = await fetch("https://f30g2f7svf.execute-api.us-east-1.amazonaws.com/subscriptions/subscriptions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
-    const data = await res.json();
+ 
+    const raw = await res.json();
+ 
+    // Parse the stringified body
+    const data = typeof raw.body === "string" ? JSON.parse(raw.body) : raw.body;
+ 
     if (res.ok) setSubscriptions(data.subscriptions || []);
   };
-
+ 
+ 
   const handleRemove = async (song: Song) => {
-    await fetch("/api/unsubscribe", {
-      method: "DELETE",
+    await fetch("https://e5h0bgt284.execute-api.us-east-1.amazonaws.com/unSubscribe/unSubscribe", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, song }),
     });
     setSubscriptions(subscriptions.filter((s) => s.title !== song.title));
   };
-
+ 
   const handleQuery = async () => {
     setMessage("");
     const filled = Object.values(query).filter((v) => v.trim() !== "").length;
@@ -57,45 +63,63 @@ export default function MainPage() {
       setMessage("Please fill at least one field.");
       return;
     }
-
-    const res = await fetch("/api/query", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(query),
-    });
-    const data = await res.json();
-    if (res.ok && data.results.length > 0) {
-      setResults(data.results);
-    } else {
-      setResults([]);
-      setMessage("No result is retrieved. Please query again.");
+ 
+    try {
+      const res = await fetch("https://qxpiv0ra7c.execute-api.us-east-1.amazonaws.com/myQuery/myQuery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(query),
+      });
+ 
+      const raw = await res.json();
+ 
+      let data;
+      try {
+        data = typeof raw.body === "string" ? JSON.parse(raw.body) : raw.body;
+      } catch (e) {
+        console.error("Failed to parse Lambda body:", e);
+        setMessage("Unexpected server response.");
+        return;
+      }
+ 
+      if (res.ok && data.results && data.results.length > 0) {
+        setResults(data.results);
+      } else {
+        setResults([]);
+        setMessage("No result is retrieved. Please query again.");
+      }
+    } catch (error) {
+      console.error("Query request failed:", error);
+      setMessage("Something went wrong with your request.");
     }
   };
-
+ 
+ 
+ 
   const handleSubscribe = async (song: Song) => {
-    const res = await fetch("/api/subscribe", {
+    const res = await fetch("https://sv2nox5i89.execute-api.us-east-1.amazonaws.com/subscribe/mySubscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, song }),
     });
-  
+ 
     if (res.ok) {
-      // ✅ Add to subscriptions
+      // Add to subscriptions
       setSubscriptions([...subscriptions, song]);
-  
-      // ✅ Remove from query results
+ 
+      // Remove from query results
       const updatedResults = results.filter((s) => s.title !== song.title);
       setResults(updatedResults);
     } else {
       console.error("Subscribe failed");
     }
   };
-  
+ 
   const handleLogout = () => {
     sessionStorage.clear();
     router.push("/login");
   };
-
+ 
   return (
     <>
       <Head>

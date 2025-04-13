@@ -17,7 +17,7 @@ export default async function handler(
 
     res.status(200).json({ message: 'Database initialized and images uploaded' });
   } catch (err: any) {
-    console.error('❌ Initialization error:', err.message);
+    console.error(' Initialization error:', err.message);
     res.status(500).json({ error: 'Initialization failed' });
   }
 }

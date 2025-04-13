@@ -108,7 +108,7 @@ export async function initializeLoginTable() {
   console.log('Login data loaded into table');
 }
 
-// Call this only when you want to initialize the login table
+// Call this when you want to initialize the login table
 initializeLoginTable()
   .then(() => console.log(' Login table setup complete'))
   .catch(err => console.error(' Error setting up login table:', err));
