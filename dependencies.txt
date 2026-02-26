@@ -1,0 +1,51 @@
+# This is an React web application built with next.js on top
+
+# The first thing to check is the Node.js installation on your machine. 
+# Follow the below instructions to check the Installation
+# Windows & Mac:
+    Open command prompt as administrator (search for it, right-click, and run as administrator).
+    Run these commands one after another:
+    node -v
+    npm -v
+
+#If these above commands are not recognized, install Node.js from scratch.
+    If versions are displayed, ensure they are the latest:
+
+# If not, update your Node.js installation.
+    Windows - https://nodejs.org/en/download/current/
+    Mac - https://nodejs.org/en/download/current/
+
+# Necessary Packages
+    Once the code is cloned from the git, run the below commands to download the dependencies, that is necessary to run the project
+    npm install         # used to download the necessary node Packages for the project
+
+# Installation AWS Toolkit from the vs code market place
+
+# download and install aws cli  => https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+# check whether the awsis installed or not => aws --version
+
+# command to set up our temporary student id in aws cli
+    aws configure set aws_access_key_id YOUR_ACCESS_KEY_ID 
+    aws configure set aws_secret_access_key YOUR_SECRET_ACCESS_KEY 
+    aws configure set aws_session_token "YOUR_SESSION_TOKEN" 
+    aws configure set region us-east-1
+    aws sts get-caller-identity
+    aws s3 ls --profile student
+
+# Install AWS SDK =>  npm install aws-sdk
+
+#for uplaod-images.ts to work, we use the following in the cmd:
+# npm install axios mime-types
+# npm i --save-dev @types/mime-types
+
+# need a create a new table in dynamo db:
+    Table name - subscriptions
+    email - String
+    title - String
+
+# After moving the changes to the ec2 machine
+    need to install all the necessary dependencies
+    aws student account configuration is not necessary in ec2
+    build the application, by using =>  npm run dev
+    then run it in production mode by using => npm start
